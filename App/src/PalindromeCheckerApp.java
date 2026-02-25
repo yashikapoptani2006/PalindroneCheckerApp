@@ -1,12 +1,14 @@
 import java.util.Scanner;
-
-public class PalindromeCheckerApp {
-    public static boolean isPalindrome(String input) {
-        String cleaned = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+class PalindromeChecker {
+    public boolean checkPalindrome(String input) {
+        if (input == null) {
+            return false;
+        }
+        char[] characters = input.toCharArray();
         int start = 0;
-        int end = cleaned.length() - 1;
+        int end = characters.length - 1;
         while (start < end) {
-            if (cleaned.charAt(start) != cleaned.charAt(end)) {
+            if (characters[start] != characters[end]) {
                 return false;
             }
             start++;
@@ -14,12 +16,15 @@ public class PalindromeCheckerApp {
         }
         return true;
     }
+}
+public class PalindromeCheckerApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("===== UC10: Case-Insensitive & Space-Ignored Palindrome =====");
+        System.out.println("===== UC11: Object-Oriented Palindrome Service =====");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
-        boolean result = isPalindrome(input);
+        PalindromeChecker checker = new PalindromeChecker();
+        boolean result = checker.checkPalindrome(input);
         if (result) {
             System.out.println("Result: The string is a Palindrome.");
         } else {
