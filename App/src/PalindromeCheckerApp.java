@@ -1,21 +1,25 @@
 import java.util.Scanner;
 
 public class PalindromeCheckerApp {
-    public static boolean isPalindrome(String str, int start, int end) {
-        if (start >= end) {
-            return true;
+    public static boolean isPalindrome(String input) {
+        String cleaned = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        int start = 0;
+        int end = cleaned.length() - 1;
+        while (start < end) {
+            if (cleaned.charAt(start) != cleaned.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
         }
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-        return isPalindrome(str, start + 1, end - 1);
+        return true;
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("===== UC9: Recursive Palindrome Checker =====");
+        System.out.println("===== UC10: Case-Insensitive & Space-Ignored Palindrome =====");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
-        boolean result = isPalindrome(input, 0, input.length() - 1);
+        boolean result = isPalindrome(input);
         if (result) {
             System.out.println("Result: The string is a Palindrome.");
         } else {
