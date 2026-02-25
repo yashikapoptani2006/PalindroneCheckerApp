@@ -1,101 +1,75 @@
 import java.util.*;
 
-interface PalindromeStrategy {
-    boolean checkPalindrome(String input);
-}
+public class PalindromeCheckerApp {
 
-class StackStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String input) {
-        if (input == null) return false;
-
+    public static boolean stackPalindrome(String input) {
         Stack<Character> stack = new Stack<>();
-
         for (char ch : input.toCharArray()) {
             stack.push(ch);
         }
-
         for (char ch : input.toCharArray()) {
-            if (stack.isEmpty() || ch != stack.pop()) {
+            if (ch != stack.pop()) {
                 return false;
             }
         }
-
         return true;
     }
-}
 
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String input) {
-        if (input == null) return false;
-
+    public static boolean dequePalindrome(String input) {
         Deque<Character> deque = new LinkedList<>();
-
         for (char ch : input.toCharArray()) {
             deque.addLast(ch);
         }
-
         while (deque.size() > 1) {
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
-            if (first != last) {
+            if (deque.removeFirst() != deque.removeLast()) {
                 return false;
             }
         }
-
         return true;
     }
-}
 
-class PalindromeContext {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
+    public static boolean twoPointerPalindrome(String input) {
+        int start = 0;
+        int end = input.length() - 1;
+        while (start < end) {
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
     }
-
-    public boolean executeStrategy(String input) {
-        return strategy.checkPalindrome(input);
-    }
-}
-
-public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("===== UC12: Strategy Pattern Palindrome Checker =====");
-        System.out.println("Choose Strategy:");
-        System.out.println("1. Stack Strategy");
-        System.out.println("2. Deque Strategy");
-        System.out.print("Enter choice (1 or 2): ");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
+        System.out.println("===== UC13: Performance Comparison =====");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        PalindromeStrategy strategy;
+        long startTime, endTime;
 
-        if (choice == 1) {
-            strategy = new StackStrategy();
-        } else {
-            strategy = new DequeStrategy();
-        }
+        startTime = System.nanoTime();
+        boolean stackResult = stackPalindrome(input);
+        endTime = System.nanoTime();
+        long stackTime = endTime - startTime;
 
-        PalindromeContext context = new PalindromeContext(strategy);
+        startTime = System.nanoTime();
+        boolean dequeResult = dequePalindrome(input);
+        endTime = System.nanoTime();
+        long dequeTime = endTime - startTime;
 
-        boolean result = context.executeStrategy(input);
+        startTime = System.nanoTime();
+        boolean twoPointerResult = twoPointerPalindrome(input);
+        endTime = System.nanoTime();
+        long twoPointerTime = endTime - startTime;
 
-        if (result) {
-            System.out.println("Result: The string is a Palindrome.");
-        } else {
-            System.out.println("Result: The string is NOT a Palindrome.");
-        }
+        System.out.println("\nResults:");
+        System.out.println("Stack Strategy Result: " + stackResult + " | Time: " + stackTime + " ns");
+        System.out.println("Deque Strategy Result: " + dequeResult + " | Time: " + dequeTime + " ns");
+        System.out.println("Two Pointer Strategy Result: " + twoPointerResult + " | Time: " + twoPointerTime + " ns");
 
         scanner.close();
     }
